@@ -1,17 +1,20 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package vue;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import model.service.Case;
 
-import javax.swing.*;
-
-public class VueCase extends JButton{
-
+public class VueCase
+extends JButton {
     private Case c;
 
-
     public VueCase(Case c, ImageIcon i) {
-        super();
         super.setIcon(i);
         this.c = c;
     }
 }
+

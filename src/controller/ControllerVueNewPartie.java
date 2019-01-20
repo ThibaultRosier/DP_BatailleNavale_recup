@@ -1,22 +1,26 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package controller;
 
-import model.server.Partie;
-import vue.VueFenetre;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import model.server.Partie;
+import vue.VueFenetre;
 
-public class ControllerVueNewPartie implements ActionListener {
-
+public class ControllerVueNewPartie
+implements ActionListener {
     private String ope;
     private JPanel jp;
     private JComboBox typePartie;
     private JComboBox epoque;
     private JComboBox tirOrdi;
-
 
     public ControllerVueNewPartie(String ope, JPanel jp) {
         this.ope = ope;
@@ -31,35 +35,38 @@ public class ControllerVueNewPartie implements ActionListener {
         this.typePartie = typePartie;
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        Window window = SwingUtilities.windowForComponent(jp);
+        Window window = SwingUtilities.windowForComponent(this.jp);
         VueFenetre frame = null;
         if (window instanceof JFrame) {
-            frame = (VueFenetre) window;
+            frame = (VueFenetre)window;
         }
-
-        switch (ope) {
-            case "retour":
+        switch (this.ope) {
+            case "retour": {
                 try {
                     frame.changerPanel("vueMenuPrincipal");
-                } catch (RemoteException e1) {
+                }
+                catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
                 break;
-
-            case "lancer":
+            }
+            case "lancer": {
                 try {
                     Partie.setPartieEnCour(null);
-                    Partie.EPOQUE = (String)epoque.getSelectedItem();
-                    Partie.TYPEPARTIE = (String)typePartie.getSelectedItem();
+                    Partie.EPOQUE = (String)this.epoque.getSelectedItem();
+                    Partie.TYPEPARTIE = (String)this.typePartie.getSelectedItem();
+                    Partie.TYPETIR = (String)this.tirOrdi.getSelectedItem();
                     Partie p = Partie.getPartieEnCour();
                     frame.changerPanel("vueJeu");
-                } catch (RemoteException e1) {
+                    break;
+                }
+                catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
-                break;
+            }
         }
     }
 }
+

@@ -1,127 +1,118 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package model.server;
 
-import model.server.batiment.*;
-import model.service.Case;
-
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
+import model.server.Joueur;
+import model.server.batiment.Batiment;
+import model.server.batiment.GrandBatiment;
+import model.server.batiment.LesBatimentEpoque;
+import model.server.batiment.MoyenBatiment;
+import model.server.batiment.PetitBatiment;
+import model.service.Case;
 
-public class Camp extends UnicastRemoteObject {
-
-    public final static int LARGEUR_CAMP = 10;
-    public final static int HAUTEUR_CAMP = 10;
-
-    private final static int NOMBRE_GRAND = 1;
-    private final static int NOMBRE_MOYEN = 2;
-    private final static int NOMBRE_PETIT = 3;
-
+public class Camp
+implements Serializable {
+    public static final int LARGEUR_CAMP = 10;
+    public static final int HAUTEUR_CAMP = 10;
+    private static final int NOMBRE_GRAND = 1;
+    private static final int NOMBRE_MOYEN = 2;
+    private static final int NOMBRE_PETIT = 3;
     private Case[][] camp;
-    private Random random ;
+    private Random random;
     private Joueur joueur;
 
-
-    public Camp(Joueur j, LesBatimentEpoque lbE) throws RemoteException {
-        super();
-        GrandBatiment gb; MoyenBatiment mb ; PetitBatiment pb;
-        gb = lbE.getGrandBatiment();
-        mb = lbE.getMoyenBatiment();
-        pb = lbE.getPetitBatiment();
-        joueur = j;
-        random = new Random();
+    public Camp(Joueur j, LesBatimentEpoque lbE) {
+        int i;
+        GrandBatiment gb = lbE.getGrandBatiment();
+        MoyenBatiment mb = lbE.getMoyenBatiment();
+        PetitBatiment pb = lbE.getPetitBatiment();
+        this.joueur = j;
+        this.random = new Random();
         ArrayList<Batiment> lesBatiments = new ArrayList<Batiment>();
-        for(int i = 0; i < NOMBRE_GRAND ; i++){
-            lesBatiments.add(new Batiment(gb));
+        for (i = 0; i < 1; ++i) {
+            lesBatiments.add(new GrandBatiment(gb));
         }
-
-        for(int i = 0; i < NOMBRE_MOYEN ; i++){
-            lesBatiments.add(new Batiment(mb));
+        for (i = 0; i < 2; ++i) {
+            lesBatiments.add(new MoyenBatiment(mb));
         }
-
-        for(int i = 0; i < NOMBRE_PETIT ; i++){
-            lesBatiments.add(new Batiment(pb));
+        for (i = 0; i < 3; ++i) {
+            lesBatiments.add(new PetitBatiment(pb));
         }
-
-        remplirCamp(lesBatiments);
+        this.remplirCamp(lesBatiments);
     }
 
-
-    private  void remplirCamp(ArrayList<Batiment> lesBatiments ){
+    private void remplirCamp(ArrayList<Batiment> lesBatiments) {
         boolean placer = false;
-        int direction,x,y;
-        camp = new Case[HAUTEUR_CAMP][LARGEUR_CAMP];
-        for(int i = 0; i < HAUTEUR_CAMP ; i++){
-            for(int j = 0; j < LARGEUR_CAMP ; j++){
-                camp[i][j] = new Case(j,i);
+        this.camp = new Case[10][10];
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 10; ++j) {
+                this.camp[i][j] = new Case(j, i);
             }
         }
-        Batiment batiActu ;
-        while(!lesBatiments.isEmpty()){
+        while (!lesBatiments.isEmpty()) {
             placer = false;
-            batiActu = lesBatiments.get(0);
+            Batiment batiActu = lesBatiments.get(0);
             lesBatiments.remove(0);
             batiActu.viderCase();
             while (!placer) {
-                direction = random.nextInt(2);
-                x = random.nextInt(LARGEUR_CAMP);
-                y = random.nextInt(HAUTEUR_CAMP);
+                int direction = this.random.nextInt(2);
+                int x = this.random.nextInt(10);
+                int y = this.random.nextInt(10);
                 if (direction == 0) {
-                    placer = mettreBatimentHorizontal(camp[y][x],batiActu);
-                } else {
-                    placer = mettreBatimentVertical(camp[y][x],batiActu);
+                    placer = this.mettreBatimentHorizontal(this.camp[y][x], batiActu);
+                    continue;
                 }
+                placer = this.mettreBatimentVertical(this.camp[y][x], batiActu);
             }
         }
-
-
     }
 
-
-
-    private boolean mettreBatimentHorizontal(Case c,Batiment b){
+    private boolean mettreBatimentHorizontal(Case c, Batiment b) {
         int x = c.getX();
         int y = c.getY();
-        if(x + b.getTaille() < LARGEUR_CAMP){
-            for(int i = x; i < x+b.getTaille();i++){
-                if(camp[y][i].getBatiment() != null){
-                    return false;
-                }
+        if (x + b.getTaille() < 10) {
+            int i;
+            for (i = x; i < x + b.getTaille(); ++i) {
+                if (this.camp[y][i].getBatiment() == null) continue;
+                return false;
             }
             b.mettreHorizontal();
             b.setDebutBatiment(c);
-            for(int i = x; i < x+b.getTaille();i++){
-                camp[y][i].setBatiment(b);
+            for (i = x; i < x + b.getTaille(); ++i) {
+                this.camp[y][i].setBatiment(b);
             }
-            b.chargerTire(joueur);
+            b.chargerTire(this.joueur);
             return true;
         }
         return false;
     }
 
-    private boolean mettreBatimentVertical(Case c,Batiment b){
+    private boolean mettreBatimentVertical(Case c, Batiment b) {
         int x = c.getX();
         int y = c.getY();
-        if(y + b.getTaille() < HAUTEUR_CAMP){
-            for(int i = y; i < y+b.getTaille();i++){
-                if(camp[i][x].getBatiment() != null){
-                    return false;
-                }
+        if (y + b.getTaille() < 10) {
+            int i;
+            for (i = y; i < y + b.getTaille(); ++i) {
+                if (this.camp[i][x].getBatiment() == null) continue;
+                return false;
             }
             b.mettreVertical();
             b.setDebutBatiment(c);
-            for(int i = y; i < y+b.getTaille();i++){
-                camp[i][x].setBatiment(b);
+            for (i = y; i < y + b.getTaille(); ++i) {
+                this.camp[i][x].setBatiment(b);
             }
-            b.chargerTire(joueur);
+            b.chargerTire(this.joueur);
             return true;
         }
         return false;
     }
 
     public Case[][] getCamp() {
-        return camp;
+        return this.camp;
     }
-
-
 }
+

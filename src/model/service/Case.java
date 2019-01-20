@@ -1,64 +1,63 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package model.service;
 
+import java.io.Serializable;
 import model.server.batiment.Batiment;
 
-import java.io.Serializable;
+public class Case
+implements Serializable {
+    private Batiment batiment;
+    private boolean toucher;
+    private int x;
+    private int y;
 
-public class Case implements Serializable {
+    public Case(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.toucher = false;
+        this.batiment = null;
+    }
 
-	private Batiment batiment;
-	private boolean toucher;
-	private int x;
-	private int y;
+    public void setBatiment(Batiment batiment) {
+        this.batiment = batiment;
+        batiment.ajouterCase(this);
+    }
 
-	public Case(int x, int y){
-		this.x = x;
-		this.y = y;
-		toucher = false;
-		batiment = null;
-	}
+    public Batiment getBatiment() {
+        return this.batiment;
+    }
 
-	public void setBatiment(Batiment batiment){
-		this.batiment = batiment;
-		batiment.ajouterCase(this);
-	}
+    public void toucher() {
+        this.toucher = true;
+        if (this.batiment != null) {
+            this.batiment.toucher();
+        }
+    }
 
-	public Batiment getBatiment() {
-		return batiment;
-	}
+    public boolean getToucher() {
+        return this.toucher;
+    }
 
-	public void toucher(){
-		toucher = true;
-		if(batiment != null){
-			batiment.toucher();
-		}
-	}
+    public int getX() {
+        return this.x;
+    }
 
-	public boolean getToucher(){
-		return toucher;
-	}
+    public int getY() {
+        return this.y;
+    }
 
-	public int getX() {
-		return x;
-	}
+    public boolean estUneCaseDebutBatiment() {
+        Case c;
+        if (this.batiment != null && (c = this.batiment.getDebutBatiment()) == this) {
+            return true;
+        }
+        return false;
+    }
 
-	public int getY() {
-		return y;
-	}
-
-
-	public boolean estUneCaseDebutBatiment(){
-		if(batiment != null){
-			Case c = batiment.getDebutBatiment();
-			if(c == this){
-				return  true;
-			}
-		}
-		return false;
-	}
-
-	public String toString(){
-		return "("+x+","+y+")";
-	}
-
+    public String toString() {
+        return "(" + this.x + "," + this.y + ")";
+    }
 }
+

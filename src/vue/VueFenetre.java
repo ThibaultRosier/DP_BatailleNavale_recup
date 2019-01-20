@@ -1,97 +1,97 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package vue;
 
-import model.server.Partie;
-import model.server.Sauvegarde;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.rmi.RemoteException;
+import javax.swing.*;
 
-public class VueFenetre extends JFrame {
+import vue.VueGagnant;
+import vue.VueJeu;
+import vue.VueLoad;
+import vue.VueMenuPrincipal;
+import vue.VueNewPartie;
+import vue.VueOption;
+import vue.VueSave;
 
-    private  JPanel vueActu;
+public class VueFenetre
+extends JFrame {
+    private JPanel vueActu;
     private static int LARGEUR = 1000;
     private static int HAUTEUR = 1000;
     private GridBagConstraints gbc;
 
     public VueFenetre() {
         super("Master and Commander");
+        this.setSize(1500, 1000);
 
-        this.setSize(1500   , 1000);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        /*//test save
-        Sauvegarde s = new Sauvegarde("test","X siecle","master");
         try {
-            s.serialize("test");
-        } catch (IOException e) {
+            UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
+
+        } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        //fin test save*/
 
-
-        setLayout(new GridBagLayout());
-        gbc=new GridBagConstraints(0,0,2,1,0.25,0,GridBagConstraints.PAGE_START,GridBagConstraints.VERTICAL,new Insets(1,1,1,1), 0,0);
-
-        vueActu = new VueMenuPrincipal();
-
+        this.setExtendedState(6);
+        this.setLayout(new GridBagLayout());
+        this.gbc = new GridBagConstraints(0, 0, 2, 1, 0.25, 0.0, 19, 3, new Insets(1, 1, 1, 1), 0, 0);
+        this.vueActu = new VueMenuPrincipal();
         JLabel titre = new JLabel("Master and Commander");
-        titre.setFont(new Font("Sans Serif", Font.PLAIN, 30));
-
-        add(titre,gbc);
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.gridy=2;
-        gbc.gridwidth=1;
-        add(vueActu,gbc);
-
-        setVisible(true);
-        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        titre.setFont(new Font("Sans Serif", 0, 30));
+        this.add((Component)titre, this.gbc);
+        this.gbc.anchor = 10;
+        this.gbc.gridy = 2;
+        this.gbc.gridwidth = 1;
+        this.add((Component)this.vueActu, this.gbc);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(2);
     }
 
     public void changerPanel(String vue) throws RemoteException {
-
-        remove(vueActu);
-
-        switch(vue){
-            case "vueMenuPrincipal":
-                vueActu = new VueMenuPrincipal();
+        this.remove(this.vueActu);
+        switch (vue) {
+            case "vueMenuPrincipal": {
+                this.vueActu = new VueMenuPrincipal();
                 break;
-
-            case "vueLoad":
-                vueActu = new VueLoad();
+            }
+            case "vueLoad": {
+                this.vueActu = new VueLoad();
                 break;
-
-            case "vueNewPartie":
-                vueActu = new VueNewPartie();
+            }
+            case "vueNewPartie": {
+                this.vueActu = new VueNewPartie();
                 break;
-
-            case "vueSave":
-                vueActu = new VueSave();
+            }
+            case "vueSave": {
+                this.vueActu = new VueSave();
                 break;
-
-            case "vueOption":
-                vueActu = new VueOption();
+            }
+            case "vueOption": {
+                this.vueActu = new VueOption();
                 break;
-
-            case "vueJeu":
-                vueActu = new VueJeu();
+            }
+            case "vueJeu": {
+                this.vueActu = new VueJeu();
                 break;
-
-            case "vueGagnant":
-                vueActu = new VueGagnant();
+            }
+            case "vueGagnant": {
+                this.vueActu = new VueGagnant();
                 break;
-
-
-            default:
+            }
         }
-
-        add(vueActu,gbc);
-        repaint();
-        revalidate();
+        this.add((Component)this.vueActu, this.gbc);
+        this.repaint();
+        this.revalidate();
     }
 
     public static void main(String[] args) throws RemoteException {
         new VueFenetre();
     }
 }
+

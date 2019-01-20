@@ -1,14 +1,15 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package controller;
-
-import model.server.Partie;
-import model.service.Case;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
+import model.server.Partie;
+import model.service.Case;
 
-public class ControllerVueCase implements ActionListener {
-
+public class ControllerVueCase
+implements ActionListener {
     private Case c;
 
     public ControllerVueCase(Case c) {
@@ -17,6 +18,7 @@ public class ControllerVueCase implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Partie.caseSelection = c;
+        Partie.caseSelection = this.c;
     }
 }
+

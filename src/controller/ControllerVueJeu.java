@@ -1,17 +1,22 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package controller;
 
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import model.server.Joueur;
 import model.server.Partie;
 import vue.VueFenetre;
 import vue.VueJeu;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
-
-public class ControllerVueJeu implements ActionListener {
-
+public class ControllerVueJeu
+implements ActionListener {
     private JPanel vueJeu;
     private String ope;
     private Partie p;
@@ -20,40 +25,43 @@ public class ControllerVueJeu implements ActionListener {
         this.vueJeu = vueJeu;
         this.ope = ope;
         try {
-            p = Partie.getPartieEnCour();
-        } catch (RemoteException e) {
+            this.p = Partie.getPartieEnCour();
+        }
+        catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Window window = SwingUtilities.windowForComponent(vueJeu);
+        Window window = SwingUtilities.windowForComponent(this.vueJeu);
         VueFenetre frame = null;
         if (window instanceof JFrame) {
-            frame = (VueFenetre) window;
+            frame = (VueFenetre)window;
         }
-        switch(ope){
-            case "tirer":
-                p.tireNormal();
-                if(p.getGagnantNormal() != null){
-                    try {
-                        frame.changerPanel("vueGagnant");
-                    } catch (RemoteException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                break;
-
-            case "option":
+        switch (this.ope) {
+            case "tirer": {
+                this.p.tireNormal();
+                if (this.p.getGagnantNormal() == null) break;
                 try {
-                    frame.changerPanel("vueOption");
-                } catch (RemoteException e1) {
+                    frame.changerPanel("vueGagnant");
+                }
+                catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
                 break;
-
-            default:
+            }
+            case "option": {
+                try {
+                    frame.changerPanel("vueOption");
+                    break;
+                }
+                catch (RemoteException e1) {
+                    e1.printStackTrace();
+                    break;
+                }
+            }
         }
     }
 }
+

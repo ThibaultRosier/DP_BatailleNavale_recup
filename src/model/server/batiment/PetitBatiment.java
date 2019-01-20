@@ -1,11 +1,18 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package model.server.batiment;
 
-public abstract class PetitBatiment extends Batiment {
+import model.server.batiment.Batiment;
 
-	public PetitBatiment(int nbVie,int nbTir){
+public class PetitBatiment
+extends Batiment {
+    public PetitBatiment(int nbVie, int nbTir) {
+        super(nbTir, nbVie, 2);
+    }
 
-		super(nbTir,nbVie,2);
-	}
-
-
+    public PetitBatiment(PetitBatiment pb) {
+        super(pb);
+    }
 }
+

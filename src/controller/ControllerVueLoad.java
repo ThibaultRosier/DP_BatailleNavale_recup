@@ -1,27 +1,31 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package controller;
 
-import model.server.Partie;
-import vue.VueFenetre;
-import vue.VueLoad;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import model.server.Partie;
+import vue.VueFenetre;
 
-public class ControllerVueLoad implements ActionListener {
-
+public class ControllerVueLoad
+implements ActionListener {
     private String ope;
     private JPanel jp;
     private JList s;
 
-    public ControllerVueLoad(String ope, JPanel jp, JList s){
+    public ControllerVueLoad(String ope, JPanel jp, JList s) {
         this.ope = ope;
         this.jp = jp;
-        this.s =s;
+        this.s = s;
     }
 
     public ControllerVueLoad(String ope, JPanel jp) {
@@ -29,42 +33,40 @@ public class ControllerVueLoad implements ActionListener {
         this.jp = jp;
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        Window window = SwingUtilities.windowForComponent(jp);
+        Window window = SwingUtilities.windowForComponent(this.jp);
         VueFenetre frame = null;
         if (window instanceof JFrame) {
-            frame = (VueFenetre) window;
+            frame = (VueFenetre)window;
         }
-
-        switch(ope){
-            case "charger":
+        switch (this.ope) {
+            case "charger": {
                 File repertoire = new File("./src/fichier_sauvegarde");
-                String [] listefichiers;
-                listefichiers=repertoire.list();
+                String[] listefichiers = repertoire.list();
                 try {
-                    Partie.setPartieEnCour(Partie.deSerialize(listefichiers[s.getSelectedIndex()].substring(0, listefichiers[s.getSelectedIndex()].length() - 5)));
+                    Partie.setPartieEnCour(Partie.deSerialize(listefichiers[this.s.getSelectedIndex()].substring(0, listefichiers[this.s.getSelectedIndex()].length() - 5)));
                     frame.changerPanel("vueJeu");
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (ClassNotFoundException e1) {
+                }
+                catch (IOException e1) {
                     e1.printStackTrace();
                 }
-
+                catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                }
                 break;
-
-            case "retour":
+            }
+            case "retour": {
                 try {
                     frame.changerPanel("vueMenuPrincipal");
-                } catch (RemoteException e1) {
-                    e1.printStackTrace();
+                    break;
                 }
-                break;
-
-            default:
+                catch (RemoteException e1) {
+                    e1.printStackTrace();
+                    break;
+                }
+            }
         }
-
-
     }
 }
+

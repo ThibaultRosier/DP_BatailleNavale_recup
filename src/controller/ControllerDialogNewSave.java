@@ -1,19 +1,24 @@
+/*
+ * Decompiled with CFR 0_132.
+ */
 package controller;
 
-import model.server.Partie;
-import model.server.Sauvegarde;
-import vue.VueSave;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import model.server.Partie;
+import vue.VueSave;
 
-public class ControllerDialogNewSave implements ActionListener {
-
+public class ControllerDialogNewSave
+implements ActionListener {
     private JTextField jt;
     private VueSave jp;
 
@@ -22,28 +27,23 @@ public class ControllerDialogNewSave implements ActionListener {
         this.jp = jp;
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        if(!jt.getText().equals("")){
-
+        if (!this.jt.getText().equals("")) {
             try {
                 Partie p = Partie.getPartieEnCour();
-                p.setNom(jt.getText());
+                p.setNom(this.jt.getText());
                 p.setDate(Calendar.getInstance().getTime());
-                p.serialize(jt.getText());
-                /*jp.chargerSave(new File("./src/fichier_sauvegarde"));
-                jp.revalidate();
-                jp.repaint();*/
-            } catch (IOException e1) {
+                p.serialize(this.jt.getText());
+            }
+            catch (IOException e1) {
                 e1.printStackTrace();
             }
             Window window = SwingUtilities.windowForComponent((Component)e.getSource());
             window.dispose();
-        }
-        else{
-            JOptionPane.showMessageDialog(jt.getParent(), "saisissez un nom");
+        } else {
+            JOptionPane.showMessageDialog(this.jt.getParent(), "saisissez un nom");
         }
     }
 }
+
